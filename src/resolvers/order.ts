@@ -6,16 +6,13 @@ const prisma = new PrismaClient();
 export const orderResolvers = {
   Query: {
     // Getting all the orders from db
-    orders: async (_: any, __: any, context: any) => {
+    orders: async (_: any, args: any, context: any) => {
       if (context.user.role === "ADMIN") return prisma.order.findMany();
-      return prisma.order.findMany({ where: { userId: context.userId } });
-    },
-
-    // Getting order with specific id
-    order: (_: any, { id }: { id: string }, context: any) => {
-      return prisma.order.findUnique({
-        where: { id },
-        include: { items: true },
+      const { take, skip } = args;
+      return prisma.order.findMany({
+        take,
+        skip,
+        where: { userId: context.userId },
       });
     },
   },

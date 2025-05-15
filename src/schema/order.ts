@@ -27,7 +27,7 @@ export const orderTypeDefs = gql`
   }
 
   extend type Query {
-    orders: [Order!]!
+    orders(take: Int, skip: Int): [Order!]!
     order(id: ID!): Order
   }
 
